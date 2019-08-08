@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{album}}</title>
+<style type="text/css">
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+}
+div.container{
+    display: flex;
+    flex-flow: wrap;
+    max-width: 800px;
+    margin: auto;
+    /*justify-content: center;*/
+}
+div.thumb {
+    width: 200px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+img#preview {
+    width: 100%;
+    display: none;
+}
+a {
+    text-decoration: none;
+    line-height: 0;
+}
+
+</style>
+
+<body>
+<div class="container">
+{% for f in files %}
+<a id="{{f}}" href="/{{album}}/{{f}}" target="_blank"><div class="thumb" style="background-image: url('/thumb/{{album}}/{{f}}/small');"/></div></a>
+{%endfor%}
+<img id="preview"/>
+</div>
+</body>
+<script>
+last_a = null;
+
+function preview(a)
+{
+    let prev = document.getElementById("preview");
+    prev.src = "/thumb/{{album}}/" + a.id + "/big";
+    prev.style.display = "inline-block";
+    prev.onclick = function() { window.open("/{{album}}/"+a.id, "_blank"); };
+    a.parentNode.insertBefore(prev, a.nextSibling);
+
+    a.style.display = "none";
+    if (last_a)
+        last_a.style.display = "block";
+    last_a = a;
+}
+
+window.onload = function()
+{
+//scroll big preview to center of screen whenever
+//its <img> has finished loading
+let prev = document.getElementById("preview");
+prev.onload = function() {
+    prev.scrollIntoView({
+        behaviour: 'auto',
+        block: 'center',
+        inline: 'center'
+    });
+}
+let thumbs = document.getElementsByClassName("thumb");
+for (let i=0; i<thumbs.length; i++)
+{
+    let a = thumbs[i].parentElement;
+    a.href = "#"+a.id;
+    a.onclick = function(event)
+    {
+        preview(a);
+        event.preventDefault();
+    }
+}
+}
+</script>
+</html>
