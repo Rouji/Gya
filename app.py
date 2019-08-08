@@ -31,7 +31,7 @@ def index():
 
 @app.route('/<string:album>')
 def album_index(album: str):
-    files = listdir(safe_join(app.config['ALBUMS_BASE_DIR'], album))
+    files = sorted(listdir(safe_join(app.config['ALBUMS_BASE_DIR'], album)))
     return render_template('album.html', album=album, files=files)
 
 @app.route('/<string:album>/<string:file>')
