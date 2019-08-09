@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, safe_join, send_from_directory, abort
 from os.path import isfile, isdir
-from os import listdir
+from os import listdir, remove
 import hashlib
 from subprocess import call
 
@@ -44,18 +44,21 @@ def album_file(album: str, file: str):
 @app.route('/thumb/<string:album>/<string:file>/<string:size>')
 def thumbnail(album: str, file: str, size: str):
     orig_file = safe_join(app.config['ALBUMS_BASE_DIR'], album, file)
-    if not isfile(orig_file):
-        abort(404)
 
     sha = hashlib.sha256()
     sha.update(orig_file.encode('utf-8'))
     sha.update(size.encode('utf-8'))
     cache_hex = sha.hexdigest()
     cache_file = safe_join(app.config['CACHE_DIR'], cache_hex)
+
+    if not isfile(orig_file):
+        remove(cache_file)
+        abort(404)
+
     if not isfile(cache_file):
         make_thumb(orig_file, cache_file, size)
 
     return send_from_directory(app.config['CACHE_DIR'], cache_hex)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
