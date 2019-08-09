@@ -9,6 +9,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #000;
+    color: #fff;
 }
 div.container{
     display: flex;
@@ -32,11 +33,20 @@ a {
     text-decoration: none;
     line-height: 0;
 }
+div#yesjs {display: none;}
+div#yesjs,div#nojs {width: 100%;}
 
 </style>
 
 <body>
 <div class="container">
+<div id="nojs">
+enable javascript for more functionality
+</div>
+<div id="yesjs">
+click thumbnails for a larger preview </br>
+click larger preview for the original file
+</div>
 {% for f in files %}
 <a id="{{f}}" href="{{album}}/{{f}}" target="_blank">
     <div class="thumb"style="background-image: url('thumb/{{album}}/{{f}}/small');"/></div>
@@ -64,6 +74,9 @@ function preview(a)
 
 window.onload = function()
 {
+document.getElementById("nojs").style.display = "none";
+document.getElementById("yesjs").style.display = "block";
+
 //scroll big preview to center of screen whenever
 //its <img> has finished loading
 let prev = document.getElementById("preview");
