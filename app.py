@@ -17,13 +17,13 @@ def make_thumb(infile: str, outfile: str, size: str):
 
     if size == 'small':
         px = 500
-        q = 65
+        q = 50
     elif size == 'big':
-        px = 1500
-        q = 80
+        px = 1800
+        q = 75
     else:
         raise ValueError(f'"{size}" is not a valid size')
-    call(['convert', infile, '-resize', '700^>', '-quality', str(q), '-strip', outfile])
+    call(['convert', infile, '-resize', f'{px}^>', '-quality', str(q), '-strip', outfile])
 
 @app.route('/')
 def index():
