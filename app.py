@@ -44,7 +44,6 @@ def album_file(album: str, file: str):
 @app.route('/thumb/<string:album>/<string:file>/<string:size>')
 def thumbnail(album: str, file: str, size: str):
     orig_file = safe_join(app.config['ALBUMS_BASE_DIR'], album, file)
-    print(orig_file)
     if not isfile(orig_file):
         abort(404)
 
