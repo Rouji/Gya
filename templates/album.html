@@ -25,6 +25,7 @@ div.thumb {
 }
 img#preview {
     width: 100%;
+    height: 100%;
     display: none;
 }
 a {
@@ -37,7 +38,9 @@ a {
 <body>
 <div class="container">
 {% for f in files %}
-<a id="{{f}}" href="/{{album}}/{{f}}" target="_blank"><div class="thumb" style="background-image: url('/thumb/{{album}}/{{f}}/small');"/></div></a>
+<a id="{{f}}" href="{{album}}/{{f}}" target="_blank">
+    <div class="thumb"style="background-image: url('thumb/{{album}}/{{f}}/small');"/></div>
+</a>
 {%endfor%}
 <img id="preview"/>
 </div>
@@ -71,6 +74,7 @@ prev.onload = function() {
         inline: 'center'
     });
 }
+
 let thumbs = document.getElementsByClassName("thumb");
 for (let i=0; i<thumbs.length; i++)
 {
