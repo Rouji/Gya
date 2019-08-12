@@ -51,7 +51,7 @@ click larger preview for the original file
 </div>
 {% for f in files %}
 <a id="{{f}}" href="{{album}}/{{f}}" target="_blank">
-    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small'){% if f.split('.')[-1] in video_ext %}, url('/play.svg'){% endif %};"/></div>
+    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small.jpg'){% if f.split('.')[-1] in video_ext %}, url('/play.svg'){% endif %};"/></div>
 </a>
 {%endfor%}
 <img id="preview"/>
@@ -63,7 +63,7 @@ last_a = null;
 function preview(a)
 {
     let prev = document.getElementById("preview");
-    prev.src = "/thumb/{{album}}/" + a.id + "/big";
+    prev.src = "/thumb/{{album}}/" + a.id + "/big.jpg";
     prev.style.display = "inline-block";
     prev.onclick = function() { window.open("/{{album}}/"+a.id, "_blank"); };
     a.parentNode.insertBefore(prev, a.nextSibling);

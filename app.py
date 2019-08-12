@@ -47,6 +47,7 @@ def playsvg():
 
 @app.route('/thumb/<string:album>/<string:file>/<string:size>')
 def thumbnail(album: str, file: str, size: str):
+    size = size.split('.')[0]
     orig_file = safe_join(app.config['ALBUMS_BASE_DIR'], album, file)
 
     sha = hashlib.sha256()
