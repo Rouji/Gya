@@ -24,6 +24,7 @@ div.thumb {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
+    background-blend-mode: color;
 }
 img#preview {
     width: 100%;
@@ -50,7 +51,7 @@ click larger preview for the original file
 </div>
 {% for f in files %}
 <a id="{{f}}" href="{{album}}/{{f}}" target="_blank">
-    <div class="thumb"style="background-image: url('thumb/{{album}}/{{f}}/small');"/></div>
+    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small'){% if f.split('.')[-1] in video_ext %}, url('/play.svg'){% endif %};"/></div>
 </a>
 {%endfor%}
 <img id="preview"/>

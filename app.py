@@ -32,7 +32,7 @@ def index():
 @app.route('/<string:album>')
 def album_index(album: str):
     files = sorted(listdir(safe_join(app.config['ALBUMS_BASE_DIR'], album)))
-    return render_template('album.html', album=album, files=files)
+    return render_template('album.html', album=album, files=files, video_ext=app.config['VIDEO_EXT'])
 
 @app.route('/<string:album>/<string:file>')
 def album_file(album: str, file: str):
@@ -40,6 +40,10 @@ def album_file(album: str, file: str):
     if not isdir(album_path):
         abort(404)
     return send_from_directory(album_path, file)
+
+@app.route('/play.svg')
+def playsvg():
+    return send_from_directory(app.root_path, 'play.svg')
 
 @app.route('/thumb/<string:album>/<string:file>/<string:size>')
 def thumbnail(album: str, file: str, size: str):
