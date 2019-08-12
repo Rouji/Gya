@@ -13,7 +13,7 @@ def make_thumb(infile: str, outfile: str, size: str):
     '''infile and outfile assumed to be safe'''
     ext = infile.split('.')[-1].lower()
     if ext in app.config['VIDEO_EXT']:
-        ext += '[0]'  # use first frame if video
+        infile += '[0]'  # use first frame if video
 
     if size == 'small':
         px = 500
@@ -49,7 +49,7 @@ def thumbnail(album: str, file: str, size: str):
     sha.update(orig_file.encode('utf-8'))
     sha.update(size.encode('utf-8'))
     cache_hex = sha.hexdigest()
-    cache_file = safe_join(app.config['CACHE_DIR'], cache_hex)
+    cache_file = safe_join(app.config['CACHE_DIR'], cache_hex) + '.jpg'
 
     if not isfile(orig_file):
         remove(cache_file)
@@ -58,7 +58,7 @@ def thumbnail(album: str, file: str, size: str):
     if not isfile(cache_file):
         make_thumb(orig_file, cache_file, size)
 
-    return send_from_directory(app.config['CACHE_DIR'], cache_hex)
+    return send_from_directory(app.config['CACHE_DIR'], cache_hex + '.jpg')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
