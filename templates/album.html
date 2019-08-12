@@ -50,8 +50,9 @@ click thumbnails for a larger preview </br>
 click larger preview for the original file
 </div>
 {% for f in files %}
-<a id="{{f}}" href="{{album}}/{{f}}" target="_blank">
-    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small.jpg'){% if f.split('.')[-1] in video_ext %}, url('/play.svg'){% endif %};"/></div>
+{% set isvid = f.split('.')[-1] in video_ext %}
+<a id="{{f}}" class="{{ 'video' if isvid else '' }}" href="{{album}}/{{f}}" target="_blank">
+    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small.jpg'){% if isvid %}, url('/play.svg'){% endif %};"/></div>
 </a>
 {%endfor%}
 <img id="preview"/>
@@ -94,6 +95,8 @@ let thumbs = document.getElementsByClassName("thumb");
 for (let i=0; i<thumbs.length; i++)
 {
     let a = thumbs[i].parentElement;
+    if (a.className == "video")
+        continue;
     a.href = "#"+a.id;
     a.onclick = function(event)
     {
