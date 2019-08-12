@@ -49,10 +49,10 @@ enable javascript for more functionality
 click thumbnails for a larger preview </br>
 click larger preview for the original file
 </div>
-{% for f in files %}
-{% set isvid = f.split('.')[-1] in video_ext %}
-<a id="{{f}}" class="{{ 'video' if isvid else '' }}" href="{{album}}/{{f}}" target="_blank">
-    <div class="thumb" style="background-image: url('thumb/{{album}}/{{f}}/small.jpg'){% if isvid %}, url('/play.svg'){% endif %};"/></div>
+{% for file in files %}
+{% set isvid = file.split('.')[-1] in video_ext %}
+<a id="{{file}}" class="{{ 'video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank">
+    <div class="thumb" style="background-image: url('thumb/{{album}}/{{file}}/small.jpg'){% if isvid %}, url('/play.svg'){% endif %};"/></div>
 </a>
 {%endfor%}
 <img id="preview"/>
@@ -64,15 +64,29 @@ last_a = null;
 function preview(a)
 {
     let prev = document.getElementById("preview");
-    prev.src = "/thumb/{{album}}/" + a.id + "/big.jpg";
+    a.parentNode.insertBefore(prev, a.nextSibling);
     prev.style.display = "inline-block";
     prev.onclick = function() { window.open("/{{album}}/"+a.id, "_blank"); };
-    a.parentNode.insertBefore(prev, a.nextSibling);
 
     a.style.display = "none";
     if (last_a)
         last_a.style.display = "block";
     last_a = a;
+
+    center_prev();
+    prev.src = "/thumb/{{album}}/" + a.id + "/big.jpg";
+}
+
+//scroll big preview to center of screen whenever
+//its <img> has finished loading
+function center_prev()
+{
+    let prev = document.getElementById("preview");
+    prev.scrollIntoView({
+        behaviour: 'auto',
+        block: 'center',
+        inline: 'center'
+    });
 }
 
 window.onload = function()
@@ -80,16 +94,8 @@ window.onload = function()
 document.getElementById("nojs").style.display = "none";
 document.getElementById("yesjs").style.display = "block";
 
-//scroll big preview to center of screen whenever
-//its <img> has finished loading
 let prev = document.getElementById("preview");
-prev.onload = function() {
-    prev.scrollIntoView({
-        behaviour: 'auto',
-        block: 'center',
-        inline: 'center'
-    });
-}
+prev.onload = center_prev;
 
 let thumbs = document.getElementsByClassName("thumb");
 for (let i=0; i<thumbs.length; i++)
