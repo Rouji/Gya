@@ -10,18 +10,36 @@ body {
     padding: 0;
     background-color: #000;
     color: #fff;
+    font-family: "Open Sans", Arial;
+    line-height: 1.4;
 }
 div.container{
     display: flex;
     flex-flow: wrap;
     max-width: 900px;
     margin: auto;
-    /*justify-content: center;*/
 }
 img#preview {
     width: 100%;
     height: 100%;
+    min-height: 100px;
     display: none;
+}
+@keyframes fade {
+    0% {opacity: 0.5;}
+    50% {opacity: 1;}
+    100% {opacity: 0.5;}
+}
+span#loading {
+    font-size: 200%;
+    position: relative;
+    width: 100%;
+    height: 0;
+    bottom: 1.5em;
+    padding-left: 0.2em;
+    text-shadow: #000 1px 1px 1px;
+    display: none;
+    animation: fade 2s infinite;
 }
 a {
     width: 33%;
@@ -59,6 +77,7 @@ click larger preview for the original file
 </a>
 {%endfor%}
 <img id="preview"/>
+<span id="loading">loading...</span>
 </div>
 </body>
 <script>
@@ -67,9 +86,14 @@ last_a = null;
 function preview(a)
 {
     let prev = document.getElementById("preview");
+    let load = document.getElementById("loading");
+
     a.parentNode.insertBefore(prev, a.nextSibling);
     prev.style.display = "inline-block";
     prev.onclick = function() { window.open("/{{album}}/"+a.id, "_blank"); };
+
+    a.parentNode.insertBefore(load, prev.nextSibling);
+    load.style.display = "block";
 
     a.style.display = "none";
     if (last_a)
@@ -86,7 +110,7 @@ function center_prev()
 {
     let prev = document.getElementById("preview");
     prev.scrollIntoView({
-        behaviour: 'auto',
+        behavior: 'smooth',
         block: 'center',
         inline: 'center'
     });
@@ -98,7 +122,10 @@ document.getElementById("nojs").style.display = "none";
 document.getElementById("yesjs").style.display = "block";
 
 let prev = document.getElementById("preview");
-prev.onload = center_prev;
+prev.onload = function() {
+    center_prev();
+    document.getElementById("loading").style.display = "none";
+};
 
 let thumbs = document.getElementsByClassName("thumb");
 for (let i=0; i<thumbs.length; i++)
