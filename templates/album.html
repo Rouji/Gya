@@ -18,22 +18,26 @@ div.container{
     margin: auto;
     /*justify-content: center;*/
 }
-div.thumb {
-    width: 200px;
-    height: 200px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    background-blend-mode: color;
-}
 img#preview {
     width: 100%;
     height: 100%;
     display: none;
 }
 a {
+    width: 25%;
+    padding-top: 25%;
     text-decoration: none;
     line-height: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: color;
+}
+@media only screen and (max-width: 600px) {
+  a {
+    width: 50%;
+    padding-top: 50%;
+  }
 }
 div#yesjs {display: none;}
 div#yesjs,div#nojs {width: 100%;}
@@ -51,8 +55,7 @@ click larger preview for the original file
 </div>
 {% for file in files %}
 {% set isvid = file.split('.')[-1] in video_ext %}
-<a id="{{file}}" class="{{ 'video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank">
-    <div class="thumb" style="background-image: url('thumb/{{album}}/{{file}}/small.jpg'){% if isvid %}, url('/play.svg'){% endif %};"/></div>
+<a id="{{file}}" class="thumb {{ 'video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank" style="background-image: url('thumb/{{album}}/{{file}}/small.jpg'){% if isvid %}, url('/play.svg'){% endif %};">
 </a>
 {%endfor%}
 <img id="preview"/>
@@ -100,8 +103,8 @@ prev.onload = center_prev;
 let thumbs = document.getElementsByClassName("thumb");
 for (let i=0; i<thumbs.length; i++)
 {
-    let a = thumbs[i].parentElement;
-    if (a.className == "video")
+    let a = thumbs[i];
+    if (a.className.indexOf("video") !== -1)
         continue;
     a.href = "#"+a.id;
     a.onclick = function(event)
