@@ -31,7 +31,10 @@ def index():
 
 @app.route('/<string:album>')
 def album_index(album: str):
-    files = sorted(listdir(safe_join(app.config['ALBUMS_BASE_DIR'], album)))
+    try:
+        files = sorted(listdir(safe_join(app.config['ALBUMS_BASE_DIR'], album)))
+    except FileNotFoundError as ex:
+        abort(404)
     return render_template('album.html', album=album, files=files, video_ext=app.config['VIDEO_EXT'])
 
 @app.route('/<string:album>/<string:file>')
