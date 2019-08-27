@@ -133,7 +133,7 @@ for (let i=0; i<thumbs.length; i++)
     let a = thumbs[i];
     if (a.className.indexOf("video") !== -1)
         continue;
-    a.href = "#"+a.id;
+
     a.onclick = function(event)
     {
         preview(a);
