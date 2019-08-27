@@ -16,11 +16,11 @@ def make_thumb(infile: str, outfile: str, size: str):
         infile += '[0]'  # use first frame if video
 
     if size == 'small':
-        px = 500
-        q = 50
+        px = app.config.get('THUMB_S_PX') or 500
+        q = app.config.get('THUMB_S_Q') or 50
     elif size == 'big':
-        px = 1800
-        q = 75
+        px = app.config.get('THUMB_B_PX') or 1800
+        q = app.config.get('THUMB_B_Q') or 75
     else:
         raise ValueError(f'"{size}" is not a valid size')
     call(['convert', infile, '-auto-orient', '-resize', f'{px}^>', '-quality', str(q), '-strip', outfile])
