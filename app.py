@@ -23,7 +23,16 @@ def make_thumb(infile: str, outfile: str, size: str):
         q = app.config.get('THUMB_B_Q') or 75
     else:
         raise ValueError(f'"{size}" is not a valid size')
-    call(['convert', infile, '-auto-orient', '-resize', f'{px}^>', '-quality', str(q), '-strip', outfile])
+    call([
+        'convert',
+        '-strip',
+        '-interlace', 'Plane',
+        infile,
+        '-auto-orient',
+        '-resize', f'{px}^>',
+        '-quality', str(q),
+        outfile
+    ])
 
 @app.route('/')
 def index():
