@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{album}}</title>
-<style type="text/css">
+<style>
 body {
     margin: 0;
     padding: 0;
@@ -86,29 +86,29 @@ div#yesscript,noscript#noscript {width: 100%;}
 
 <body>
 <div class="container">
-<noscript id="noscript">
-Enable javascript for inline previews and stuff
-</noscript>
-<h1>{{album}}</h1>
-{% for file in files %}
-{% set isvid = file.split('.')[-1] in video_ext %}
-<a id="{{file}}" class="thumb{{ ' video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank">
-    <div class="dummy"></div>
-    <img src="thumb/{{album}}/{{file}}/small.jpg" alt="{{file}}" title="{{file}}"/>
-    {% if isvid %}
-    <img src="play.svg"/>
-    {% endif%}
-</a>
-{%endfor%}
-<a id="preview" target="_blank"><img/></a>
-<span id="loading">loading...</span>
-<div id="yesscript">
-Click thumbnails for a larger preview. <br/>
-Click larger preview for the original file. <br/>
-Use keys ←/h, →/l, esc, return to navigate.
+    <noscript id="noscript">
+        Enable javascript for inline previews and stuff
+    </noscript>
+    <h1>{{album}}</h1>
+    {% for file in files %}
+    {% set isvid = file.split('.')[-1] in video_ext %}
+    <a id="{{file}}" class="thumb{{ ' video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank">
+        <div class="dummy"></div>
+        <img src="thumb/{{album}}/{{file}}/small.jpg" alt="{{file}}" title="{{file}}"/>
+        {% if isvid %}
+        <img src="play.svg"/>
+        {% endif%}
+    </a>
+    {%endfor%}
+    <a id="preview" target="_blank" href="#"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="inline preview img"/></a>
+    <span id="loading">loading...</span>
+    <div id="yesscript">
+        Click thumbnails for a larger preview. <br/>
+        Click larger preview for the original file. <br/>
+        Use keys ←/h, →/l, esc, return to navigate.
+    </div>
 </div>
-</div>
-</body>
+
 <script>
 thumbs = [];
 last_idx = null;
@@ -213,4 +213,6 @@ document.addEventListener('keydown', function(e) {
 }, false);
 }
 </script>
+
+</body>
 </html>
