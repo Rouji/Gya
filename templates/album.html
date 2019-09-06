@@ -94,13 +94,23 @@ div#yesscript,noscript#noscript {width: 100%;}
     {% set isvid = file.split('.')[-1] in video_ext %}
     <a id="{{file}}" class="thumb{{ ' video' if isvid else '' }}" href="{{album}}/{{file}}" target="_blank">
         <div class="dummy"></div>
-        <img src="thumb/{{album}}/{{file}}/small.jpg" alt="{{file}}" title="{{file}}"/>
+        <picture>
+            <source srcset="thumb/{{album}}/{{file}}/small.webp" type="image/webp"/>
+            <source srcset="thumb/{{album}}/{{file}}/small.jpg" type="image/jpeg"/>
+            <img src="thumb/{{album}}/{{file}}/small.jpg" alt="{{file}}" title="{{file}}"/>
+        </picture>
         {% if isvid %}
         <img src="play.svg"/>
         {% endif%}
     </a>
     {%endfor%}
-    <a id="preview" target="_blank" href="#"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="inline preview img"/></a>
+    <a id="preview" target="_blank" href="#">
+        <picture>
+            <source id="prev_webp" srcset="#" type="image/webp"/>
+            <source id="prev_jpg" srcset="#" type="image/jpeg"/>
+            <img id="prev_fallback" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="inline preview img"/>
+        </picture>
+    </a>
     <span id="loading">loading...</span>
     <div id="yesscript">
         Click thumbnails for a larger preview. <br/>
@@ -132,7 +142,9 @@ function preview(idx)
     last_idx = idx;
 
     center_prev();
-    prev.firstChild.src = "/thumb/{{album | safe}}/" + thumb.id + "/big.jpg";
+    document.getElementById("prev_webp").srcset = "/thumb/{{album | safe}}/" + thumb.id + "/big.webp";
+    document.getElementById("prev_jpg").srcset = "/thumb/{{album | safe}}/" + thumb.id + "/big.jpg";
+    document.getElementById("prev_fallback").src = "/thumb/{{album | safe}}/" + thumb.id + "/big.jpg";
 }
 
 //scroll big preview to center of screen whenever
@@ -151,10 +163,9 @@ window.onload = function()
 document.getElementById("noscript").style.display = "none";
 document.getElementById("yesscript").style.display = "block";
 
-let prev = document.getElementById("preview");
 thumbs = document.getElementsByClassName("thumb");
 
-prev.firstChild.onload = function() {
+document.getElementById("prev_fallback").onload = function() {
     center_prev();
     document.getElementById("loading").style.display = "none";
 };

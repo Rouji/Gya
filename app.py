@@ -59,14 +59,16 @@ def playsvg():
 
 @app.route('/thumb/<string:album>/<string:file>/<string:size>')
 def thumbnail(album: str, file: str, size: str):
-    size = size.split('.')[0]
+    size, ext = size.split('.')
+    if ext not in ['jpg', 'webp']:
+        abort(404)
     orig_file = safe_join(app.config['ALBUMS_BASE_DIR'], album, file)
 
     sha = hashlib.sha256()
     sha.update(orig_file.encode('utf-8'))
     sha.update(size.encode('utf-8'))
     cache_hex = sha.hexdigest()
-    cache_file = safe_join(app.config['CACHE_DIR'], cache_hex) + '.jpg'
+    cache_file = safe_join(app.config['CACHE_DIR'], cache_hex) + '.' + ext
 
     if not isfile(orig_file):
         if isfile(cache_file):
@@ -76,7 +78,7 @@ def thumbnail(album: str, file: str, size: str):
     if not isfile(cache_file):
         make_thumb(orig_file, cache_file, size)
 
-    return send_from_directory(app.config['CACHE_DIR'], cache_hex + '.jpg')
+    return send_from_directory(app.config['CACHE_DIR'], cache_hex + '.' + ext)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
