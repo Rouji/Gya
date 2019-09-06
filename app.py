@@ -69,7 +69,8 @@ def thumbnail(album: str, file: str, size: str):
     cache_file = safe_join(app.config['CACHE_DIR'], cache_hex) + '.jpg'
 
     if not isfile(orig_file):
-        remove(cache_file)
+        if isfile(cache_file):
+            remove(cache_file)
         abort(404)
 
     if not isfile(cache_file):
