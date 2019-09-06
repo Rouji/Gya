@@ -132,7 +132,7 @@ function preview(idx)
     last_idx = idx;
 
     center_prev();
-    prev.firstChild.src = "/thumb/{{album}}/" + thumb.id + "/big.jpg";
+    prev.firstChild.src = "/thumb/{{album | safe}}/" + thumb.id + "/big.jpg";
 }
 
 //scroll big preview to center of screen whenever
