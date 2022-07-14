@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{album}}</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: "Open Sans", Arial;
+    line-height: 1.4;
+}
+h1 {
+    width: 100%;
+    text-align: center;
+    font-weight: 200;
+}
+div.container{
+    display: flex;
+    flex-flow: wrap;
+    max-width: 900px;
+    margin: auto;
+}
+a {width: 100%;}
+</style>
+
+<body>
+
+<div class="container">
+    {% for dir in dirs %}
+    <a href="{{dir}}">{{dir}}</a>
+    {%endfor%}
+</div>
+
+</body>
+</html>

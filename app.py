@@ -36,7 +36,12 @@ def make_thumb(infile: str, outfile: str, size: str):
 
 @app.route('/')
 def index():
-    return 'hello this is a webpage'
+    dirs = sorted([
+        d for d
+        in listdir(app.config['ALBUMS_BASE_DIR'])
+        if isdir(safe_join(app.config['ALBUMS_BASE_DIR'],d))
+    ])
+    return render_template('index.html', dirs=dirs)
 
 @app.route('/<string:album>')
 def album_index(album: str):
